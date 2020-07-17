@@ -6,6 +6,7 @@ from Graph import Graph
 from random import random
 import jsonpickle
 import sys
+sys.setrecursionlimit(9000000)
 
 class Builder():
 	def __init__(self):
@@ -26,29 +27,27 @@ class Builder():
 			return (None, None)
 		i = int(random() * node_size)
 		j = i
-		while j is i:
+		while j == i:
 			j = int(random() * node_size)
-		assert i is not j, "cannot pick a pair of a same node" 
-		return (nodes[i], nodes[j])
+		assert i is not j, "cannot pick a pair of a same node"
+		return (nodes[min(i, j)], nodes[max(i,j)])
 		
 	def CreateRandomNode(self):
-		outEdge = (random() > 0.5)
 		x = self.PickRandomNode()
 		y = self.g.CreateNode()
 		if x is not None:
-			if outEdge:
-				e = self.g.CreateEdge(x, y)
-			else:
-				e = self.g.CreateEdge(y, x)
+			assert x.idx is not y.idx
+			e = self.g.CreateEdge(x, y)
 		return y
 
 	def CreateRandomEdge(self):
-		node1, node2 = builder.PickRandomNodePair()
-		if node1 is None or node2 is None:
+		x, y = builder.PickRandomNodePair()
+		if x is None or y is None:
 			self.CreateRandomNode()
 			return None
 		else:
-			e = builder.g.CreateEdge(node1, node2)
+			assert x.idx is not y.idx
+			e = builder.g.CreateEdge(x, y)
 			return e
 	
 

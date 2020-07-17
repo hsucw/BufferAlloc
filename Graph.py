@@ -49,7 +49,7 @@ class Graph():
 		self.nodes.append(n)
 		return n
 	def CreateEdge(self, B, E):
-		assert B.idx is not E.idx
+		assert B.idx is not E.idx, "Cannot self connected " + str(B) + ", " + str(E)
 		for mEdge in self.edges:
 			if mEdge.begin.idx is B.idx and mEdge.end.idx is E.idx:
 				return mEdge
@@ -57,19 +57,32 @@ class Graph():
 		self.edges.append(e)
 		return e
 	def GetNodes(self):
-		return self.nodes
+		return self.nodes.copy()
 	def GetNode(self, idx):
 		for n in self.nodes:
 			if idx == n.idx:
 				return n
 		return None
 	def GetEdges(self):
-		return self.edges
+		return self.edges.copy()
 	def GetEdge(self, idx):
 		for n in self.edges:
 			if idx == n.idx:
 				return n
 		return None
+	def Verify(self):
+		for n in self.nodes:
+			cnt = 0
+			for x in self.nodes:
+				if n.idx is x.idx:
+					cnt += 1
+			assert cnt is 1
+		for e in self.edges:
+			cnt = 0
+			for y in self.edges:
+				if e.idx is y.idx:
+					cnt += 1
+			assert cnt is 1
 	def __repr__(self):
 		out = ""
 		out += "== Graph ==\n"
