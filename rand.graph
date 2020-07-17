@@ -1,0 +1,103 @@
+{
+    "py/object": "Graph.Graph", 
+    "root": null, 
+    "nodes": [
+        {
+            "py/object": "Graph.Node", 
+            "idx": 0, 
+            "inE": [
+                {
+                    "py/object": "Graph.Edge", 
+                    "idx": 0, 
+                    "begin": {
+                        "py/object": "Graph.Node", 
+                        "idx": 1, 
+                        "inE": [
+                            {
+                                "py/object": "Graph.Edge", 
+                                "idx": 3, 
+                                "begin": {
+                                    "py/object": "Graph.Node", 
+                                    "idx": 2, 
+                                    "inE": [
+                                        {
+                                            "py/object": "Graph.Edge", 
+                                            "idx": 1, 
+                                            "begin": {
+                                                "py/id": 2
+                                            }, 
+                                            "end": {
+                                                "py/id": 8
+                                            }, 
+                                            "reload": 2.181569981639525
+                                        }
+                                    ], 
+                                    "outE": [
+                                        {
+                                            "py/object": "Graph.Edge", 
+                                            "idx": 2, 
+                                            "begin": {
+                                                "py/id": 8
+                                            }, 
+                                            "end": {
+                                                "py/id": 2
+                                            }, 
+                                            "reload": 1.9705365170057412
+                                        }, 
+                                        {
+                                            "py/id": 7
+                                        }
+                                    ], 
+                                    "size": 209280
+                                }, 
+                                "end": {
+                                    "py/id": 5
+                                }, 
+                                "reload": 4.073071836310287
+                            }
+                        ], 
+                        "outE": [
+                            {
+                                "py/id": 4
+                            }
+                        ], 
+                        "size": 157412
+                    }, 
+                    "end": {
+                        "py/id": 2
+                    }, 
+                    "reload": 2.2054495503397513
+                }, 
+                {
+                    "py/id": 12
+                }
+            ], 
+            "outE": [
+                {
+                    "py/id": 10
+                }
+            ], 
+            "size": 907680
+        }, 
+        {
+            "py/id": 5
+        }, 
+        {
+            "py/id": 8
+        }
+    ], 
+    "edges": [
+        {
+            "py/id": 4
+        }, 
+        {
+            "py/id": 10
+        }, 
+        {
+            "py/id": 12
+        }, 
+        {
+            "py/id": 7
+        }
+    ]
+}
