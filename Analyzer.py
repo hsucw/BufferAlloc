@@ -16,10 +16,17 @@ class Cluster():
 		assert self.Verify(), "The given nodes is not a connected graph"
 		self.alloc = sum([n.size for n in nodes])
 		self.reduce = sum([int(e.reload * e.begin.size) for e in self.edges])
-
+	def __eq__(self, other):
+		assert other.Verify(), "other cluster is invalid"
+		assert self.Verify(), "me cluster is invalid"
+		mNodes = set(self.nodes)
+		oNodes = set(other.nodes)
+		return True if mNodes == oNodes else False
 	def Verify(self):
 		if len(self.nodes) == 1:
 			return True
+		if len(self.nodes) != len(set(self.nodes)):
+			return False
 		all_nodes = self.nodes.copy()
 		while all_nodes:
 			n = all_nodes.pop()
@@ -57,9 +64,20 @@ class Analyzer(AnalyzerBase):
 			available_size = self.buf_size - x.alloc
 			assert available_size > 0, "No buffer size"
 			in_candidate = [e.begin for e in x.in_edges]
+			out_candidate = [e.end for e in x.out_edges]
 			max_cost = 0
 			max_candidate = None
 			for c in in_candidate:
+				if c.size > available_size:
+					continue
+				alloc_c = c.size
+				reduce_c = sum([int(e.reload * c.size) for e in c.outE])
+				cost_c = Cost(alloc_c, reduce_c)
+				if max_cost < cost_c:
+					max_cost = cost_c
+					max_candidate = c
+					max_config = (alloc_c, reduce_c)
+			for c in out_candidate:
 				if c.size > available_size:
 					continue
 				alloc_c = c.size
@@ -73,15 +91,32 @@ class Analyzer(AnalyzerBase):
 				new_nodes = x.nodes
 				new_nodes.append(max_candidate)
 				new_candidate = Cluster(new_nodes)
-				self.clusters.append(new_candidate)
-				cur_round.append(new_candidate)
+				if new_candidate not in self.clusters:
+					self.clusters.append(new_candidate)
+					cur_round.append(new_candidate)
+				else:
+					print("Existed cluster: {}".format(new_candidate))
 
 	def CleanUpByCluster(self, x, all_clusters):
+		print("== Before CleanUp == ")
+		for c in all_clusters:
+			print("Cluster {}".format([node.idx for node in c.nodes]))
+		remove_list = []
 		for c in all_clusters:
 			for n in c.nodes:
 				if n in x.nodes:
 					if c in all_clusters:
-						all_clusters.remove(c)
+						print("remove {} by {}".format([node.idx for node in c.nodes],n.idx))
+						remove_list.append(c)
+		for c in remove_list:
+			if c in all_clusters:
+				all_clusters.remove(c)
+			else:
+				print("Cluster {} is not in list".format([node.idx for node in c.nodes]))
+		print("== After CleanUp == ")
+		for c in all_clusters:
+			print("Cluster {}".format([node.idx for node in c.nodes]))
+		print("== Done CleanUp == ")
 
 	def IsDependent(self, x, c):
 		for n in c.nodes:
@@ -116,9 +151,13 @@ class Analyzer(AnalyzerBase):
 			self.sol_nodes += x.nodes
 			self.sol_reduce += x.reduce
 			self.CleanUpByCluster(x, all_clusters)
+			print("~~~~~~")
 			print(x)
 			print("sol_nodes: ", [n.idx for n in self.sol_nodes])
 			print("sol_reduce: ", self.sol_reduce)
+			for z in all_clusters:
+				print(z)
+		print("===========")
 		print("sol:")
 		i = 0
 		for s in self.sol:
