@@ -57,6 +57,10 @@ if __name__ == "__main__":
 		print("given a number of random object (nodes, edges)")
 		exit(1)
 	num = int(sys.argv[1])
+	if len(sys.argv) > 2:
+		graph_name = sys.argv[2]
+	else:
+		graph_name = "rand.graph"
 	for x in range(num):
 		# 80% create edges
 		addEdge = (random() > 0.2)
@@ -65,6 +69,7 @@ if __name__ == "__main__":
 		else: 
 			builder.CreateRandomNode()
 	frozen = jsonpickle.encode(builder.GetGraph(), indent=4, separators=(', ', ': '))
-	with open("rand.graph", 'w') as outf:
+	with open(graph_name, 'w') as outf:
 		outf.write(frozen)
+	print("Dump to {}".format(graph_name))
 	print(builder.GetGraph())

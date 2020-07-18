@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
-from Graph import Node
-from Graph import Edge
-from Graph import Graph
-
-from random import random
+from AnalyzerBase import AnalyzerBase
 import jsonpickle
 import sys
-sys.setrecursionlimit(9000000)
 
 def Cost(alloc, reload_size):
 	return reload_size * 1.0 / (alloc)
@@ -49,10 +44,9 @@ class Cluster():
 			(self.reduce * 1.0 / self.alloc), self.alloc, self.reduce,
 			[n.idx for n in self.nodes])
 
-class Analyzer():
-	def __init__(self, graph, buf_size):
-		self.g = graph
-		self.buf_size = buf_size
+class Analyzer(AnalyzerBase):
+	def __init__(self, graph_name, buf_size):
+		super().__init__(graph_name, buf_size)
 		self.next = [Cluster([x]) for x in self.g.GetNodes()]
 		self.clusters = self.next
 	def BuildCluster(self):
@@ -108,29 +102,29 @@ class Analyzer():
 			print(c)
 		all_clusters = self.clusters.copy()
 		avilable_size = self.buf_size
-		sol = []
-		sol_nodes = []
-		sol_reduce = 0
+		self.sol = []
+		self.sol_nodes = []
+		self.sol_reduce = 0
 		while avilable_size and all_clusters:
 			x = all_clusters.pop(0)
 			if avilable_size < x.alloc:
 				continue
-			if self.IsAdjcent(sol_nodes, x):
-				print("{} IsAdjcent to {}".format(x, [n.idx for n in sol_nodes]))
+			if self.IsAdjcent(self.sol_nodes, x):
+				print("{} IsAdjcent to {}".format(x, [n.idx for n in self.sol_nodes]))
 				avilable_size -= x.alloc
-			sol.append(x)
-			sol_nodes += x.nodes
-			sol_reduce += x.reduce
+			self.sol.append(x)
+			self.sol_nodes += x.nodes
+			self.sol_reduce += x.reduce
 			self.CleanUpByCluster(x, all_clusters)
 			print(x)
-			print("sol_nodes: ", [n.idx for n in sol_nodes])
-			print("sol_reduce: ", sol_reduce)
+			print("sol_nodes: ", [n.idx for n in self.sol_nodes])
+			print("sol_reduce: ", self.sol_reduce)
 		print("sol:")
 		i = 0
-		for s in sol:
+		for s in self.sol:
 			i += 1
 			print("{}: {}".format(i, [n.idx for n in s.nodes]))
-		print("reduce: {:15,}".format(sol_reduce))
+		print("reduce: {:15,}".format(self.sol_reduce))
 		print("alloc: {:4.3f}".format((1.0 * (self.buf_size - avilable_size) / self.buf_size)))
 	def Run(self):
 		self.BuildCluster()
@@ -141,11 +135,7 @@ if __name__ == "__main__":
 		print("given a number of buffer size (MB)")
 		exit(1)
 	buf_size = int(float(sys.argv[1]) * 1024 * 1024)
-	with open("rand.graph", 'r') as outf:
-		frozen = outf.read()
-	graph = jsonpickle.decode(frozen)
-	print(graph)
-	ana = Analyzer(graph, buf_size)
-	ana.Run()
+	ana = Analyzer("rand.graph", buf_size)
+	print(ana.Run())
 	#for c in ana.clusters:
 	#	print(c)
