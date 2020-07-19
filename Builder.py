@@ -16,7 +16,7 @@ class Builder():
 	def PickRandomNode(self):
 		nodes =  self.g.GetNodes()
 		node_size = len(nodes)
-		if node_size is 0:
+		if node_size == 0:
 			return None
 		i = int(random() * node_size)
 		return nodes[i]

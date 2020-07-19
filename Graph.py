@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 import random
 
-MAX_SIZE = 1024 * 1024 # 1MB
+MAX_SIZE = 5 * 1024 * 1024 # 1MB
 MIN_RELOAD = 0.8
 MAX_RELOAD = 5.0
 
@@ -17,6 +17,8 @@ class Node():
 		self.inE.append(e)
 	def AddOutE(self, e):
 		self.outE.append(e)
+	def __str__(self):
+		return "Node: <{}>, size: {:10,}".format(self.idx, self.size)
 	def __repr__(self):
 		return "Node: <{}>, size: {:10,}, in:{}, out:{}".format(
 				self.idx, self.size, [x.idx for x in self.inE], [x.idx for x in self.outE])
@@ -76,13 +78,13 @@ class Graph():
 			for x in self.nodes:
 				if n.idx is x.idx:
 					cnt += 1
-			assert cnt is 1
+			assert cnt == 1
 		for e in self.edges:
 			cnt = 0
 			for y in self.edges:
 				if e.idx is y.idx:
 					cnt += 1
-			assert cnt is 1
+			assert cnt == 1
 	def __repr__(self):
 		out = ""
 		out += "== Graph ==\n"
