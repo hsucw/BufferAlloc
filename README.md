@@ -43,7 +43,7 @@ A example analyzer for buffer allocation
 ## Analyzer.py
 My implementation of buffer allocation
 Usage:
-  `./Analyzer 1 rand.graph`   
+  `./Analyzer.py 1 rand.graph`   
   - *1* means that the total usable buffer size is 1MB.  
   - rand.graph: optional, graph file for analysis. 
 
@@ -60,4 +60,10 @@ The verification of the answer.
 - Input: a answer (including the given buffer size)
 - Output: the reduced reload size, the answer is valid or not.
 
+## Visualizer.py
+Draw a graph as png format.   
+  `./Visualizer.py graph_name`
+- graph_name: default reads "rand.graph".  
+Example:
+![](example.png)
 
