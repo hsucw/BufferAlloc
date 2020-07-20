@@ -3,8 +3,8 @@ from Graph import Node
 from Graph import Edge
 from Graph import Graph
 
+from graphviz import Digraph
 from random import random
-import jsonpickle
 import sys
 sys.setrecursionlimit(9000000)
 
@@ -49,7 +49,34 @@ class Builder():
 			assert x.idx is not y.idx
 			e = builder.g.CreateEdge(x, y)
 			return e
-	
+
+	def DumpToDot(self, graph_name="rand_graph"):
+		G = Digraph('G', format='png', filename="{}.dot".format(graph_name))
+		for n in self.g.nodes:
+			half_mb = int(n.size * 2 / (1024 * 1024))
+			if half_mb < 9:
+				color = "/greys9/{}".format(half_mb+1)
+			else:
+				color = "/greys9/9"
+			if half_mb < 6:
+			    fontcolor = 'black'
+			else:
+			    fontcolor = 'white'
+			G.node(str(n.idx),
+				   "<{}> s:{:,}".format(n.idx, n.size),
+				   fillcolor=color, style='filled',
+				   fontcolor=fontcolor, size=str(n.size))
+		for e in self.g.edges:
+			if (e.reload * 2) < 9:
+				color = '/rdylgn9/{}'.format(9 - int(e.reload * 2))
+			else:
+				color = '/rdylgn9/9'
+			G.edge(str(e.begin.idx), str(e.end.idx),
+				   weight=str(e.reload),
+				   label="{:4.3f}".format(e.reload),
+				   arrowType='normal',
+				   color=color)
+		G.render()
 
 if __name__ == "__main__":
 	builder = Builder()
@@ -68,8 +95,5 @@ if __name__ == "__main__":
 			builder.CreateRandomEdge()
 		else: 
 			builder.CreateRandomNode()
-	frozen = jsonpickle.encode(builder.GetGraph(), indent=4, separators=(', ', ': '))
-	with open(graph_name, 'w') as outf:
-		outf.write(frozen)
-	print("Dump to {}".format(graph_name))
+	builder.DumpToDot()	
 	print(builder.GetGraph())
