@@ -28,11 +28,15 @@ Users also can use this class to craft their own graph
   - PickRandomNodePair(self):	return two nodes in graph randomly
   - CreateRandomNode(self): create a random nodes that it always be end of the edge connecting it between the original graph. 
   - CreateRandomEdge(self): create a random edges, always satisfy begin.idx < end.idx. If the creation fails, creates a node randomly.
+  - DumpToDot(self): serialize to .dot, and .png file
 
 Usage:   
   `./Builder.py 100 rand.graph`
   - *100* means that the total number of random object.
   - rand.graph: optional, output graph name. The default name is "rand.graph".
+  - output: rand_graph.dot, rand_graph.dot.png
+  Example:
+![](example.png)
   
 ## AnalyszerBase.py
 A example analyzer for buffer allocation
@@ -60,10 +64,4 @@ The verification of the answer.
 - Input: a answer (including the given buffer size)
 - Output: the reduced reload size, the answer is valid or not.
 
-## Visualizer.py
-Draw a graph as png format.   
-  `./Visualizer.py graph_name`
-- graph_name: default reads "rand.graph".  
-Example:
-![](example.png)
 
