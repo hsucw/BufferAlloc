@@ -8,9 +8,19 @@ class LifetimeAnalyzer(AnalyzerBase):
         super().__init__(graph)
         self.name="LifetimeAnalyzer"
         self.GetRes(cmdScheduler)
-        self.cmdScheduler=cmdScheduler
+        self.cmdSeq=self.analysis[cmdScheduler]['cmdSeq']
+        self.res['lifetime'] = {}
     def Run(self):
-        print(self.analysis)
+        for n in self.g.nodes:
+            start = self.cmdSeq.index(n.idx)
+            assert start is not None
+            end = -1
+            for e in n.outE:
+                out_pos = self.cmdSeq.index(e.end.idx)
+                assert out_pos is not None
+                if out_pos > end:
+                    end = out_pos
+            self.res['lifetime'][n.idx] = (start, end)
         return self.res
 
 if __name__ == "__main__":

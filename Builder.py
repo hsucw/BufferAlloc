@@ -90,7 +90,7 @@ if __name__ == "__main__":
         graph_name = "rand.graph"
     for x in range(num):
         # 80% create edges
-        addEdge = (random() > 0.2)
+        addEdge = (random() > 0.8)
         if addEdge:
             builder.CreateRandomEdge()
         else:
