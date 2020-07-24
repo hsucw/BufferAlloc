@@ -49,7 +49,7 @@ A base class for loading graph, saving, and getting analysis result.
 A command scheduler that sort by the indeice of nodes.
   - Input: the graph
   - Output: the command ordering
-Usage:
+Usage:    
   `./BasicCommandScheduler.py`
   - default graph name is "rand_graph.dot"
   - output: BasicCommandScheduler.json
@@ -58,7 +58,7 @@ Usage:
 Analyze the lifetime of node in given command ordering.
   - Input: the graph, the command ordering
   - Output: the lifetime
-Usage:
+Usage:    
   `./LifetimeAnalyzer.py`
   - default graph name is "rand_graph.dot"
   - output: LifetimeAnalyzer.json
@@ -67,7 +67,7 @@ Usage:
 Analyze the most valuable of nodes. (for Greedy algo)
   - Input: the graph, the lifetime
   - Output: the most valuable nodes (reload size / (lifetime * occupied_szie))
-Usage:
+Usage:    
   `./OccupyReloadAnalyzer.py`
   - default graph name is "rand_graph.dot"
   - output: OccupyReloadAnalyzer.json
@@ -76,16 +76,18 @@ Usage:
 Using Greedy algo to select the nodes put in buffer.
   - Input: the graph, lifetime, occupied & reload, command ordering, buffer size.
   - Output: the candidate for using buffers.
-Usage:
+Usage:    
   `./GreedyAnalyzer.py`
   - default graph name is "rand_graph.dot"
   - output: GreedyAnalyzer.json
- 
     
 ![](example.png)   
+     
 For the example, given the buffer size 5MB, the Greedy algo tells node [1] will be selected.  
 The available buffer along the execution will be   
+    
 ['0.00%', '34.95%', '34.95%', '34.95%'] => reload: 9,623,715 bytes  
+    
 However, the answer is not optimal.  
 Select node [0] is better than node [1], got reload 14,912,131 bytes.  
 
