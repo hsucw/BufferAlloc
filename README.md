@@ -34,22 +34,61 @@ Usage:
   `./Builder.py 100 rand.graph`
   - *100* means that the total number of random object.
   - rand.graph: optional, output graph name. The default name is "rand.graph".
-  - output: rand_graph.dot, rand_graph.dot.png
-  Example:
+  - output: rand_graph.dot, rand_graph.dot.png.     
+  Example:     
 ![](example.png)
   
 ## AnalyszerBase.py
-A example analyzer for buffer allocation
-- Input: a serialized graph, a buffer size (1MB)
-- Output: the nodes should be located in buffer.
-- Run(): return the answer
+A base class for loading graph, saving, and getting analysis result.  
+  - SetName(): set analysis name
+  - GetName(): get analysis name
+  - SaveRes(): save the result
+  - GetRes(): get the result
 
-## Analyzer.py
-My implementation of buffer allocation
+## BasicCommandScheduler(AnalyzerBase)
+A command scheduler that sort by the indeice of nodes.
+  - Input: the graph
+  - Output: the command ordering
 Usage:
-  `./Analyzer.py 1 rand.graph`   
-  - *1* means that the total usable buffer size is 1MB.  
-  - rand.graph: optional, graph file for analysis. 
+  `./BasicCommandScheduler.py`
+  - default graph name is "rand_graph.dot"
+  - output: BasicCommandScheduler.json
+
+## LifetimeAnalyzer(AnalyzerBase)
+Analyze the lifetime of node in given command ordering.
+  - Input: the graph, the command ordering
+  - Output: the lifetime
+Usage:
+  `./LifetimeAnalyzer.py`
+  - default graph name is "rand_graph.dot"
+  - output: LifetimeAnalyzer.json
+  
+## OccupyReloadAnalyzer(AnalyzerBase)
+Analyze the most valuable of nodes. (for Greedy algo)
+  - Input: the graph, the lifetime
+  - Output: the most valuable nodes (reload size / (lifetime * occupied_szie))
+Usage:
+  `./OccupyReloadAnalyzer.py`
+  - default graph name is "rand_graph.dot"
+  - output: OccupyReloadAnalyzer.json
+
+## GreedyAnalyzer(AnalyzerBase)
+Using Greedy algo to select the nodes put in buffer.
+  - Input: the graph, lifetime, occupied & reload, command ordering, buffer size.
+  - Output: the candidate for using buffers.
+Usage:
+  `./GreedyAnalyzer.py`
+  - default graph name is "rand_graph.dot"
+  - output: GreedyAnalyzer.json
+ 
+    
+![](example.png)   
+For the example, given the buffer size 5MB, the Greedy algo tells node [1] will be selected.  
+The available buffer along the execution will be   
+['0.00%', '34.95%', '34.95%', '34.95%'] => reload: 9,623,715 bytes  
+However, the answer is not optimal.  
+Select node [0] is better than node [1], got reload 14,912,131 bytes.  
+
 
 #### The answer format:
 1. early stage: should a list of nodes.   
